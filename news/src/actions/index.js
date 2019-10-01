@@ -15,7 +15,22 @@ export function requestPosts(){
 }
 
 
-export function recievePosts(){
-    return ({type:RECIEVE_POST,})
+export function recievePosts(data){
+    return ({type:RECIEVE_POST,data:data.articles})
   
 }
+
+
+export function fetchPosts(channel){
+    return function(dispatch){
+        dispatch(requestPosts);
+        return fetch(`https://newsapi.org/v1/articles?source=${channel}&apiKey=${MY_API_KEY}`)
+                .then(response => JSON.response,
+                    error => console.log(error)
+                    )
+                .then((json) => dispatch(recievePosts(json)))
+    }
+
+}
+
+
